@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><script src="assets/theme.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>SolutionBid cost code typeahead · Mockup 06</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="24x24" href="assets/favicon-24x24.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/theme.css"><link rel="stylesheet" href="mock.css">
+<style>
+.ta .dropdown-menu{width:100%;max-height:340px;overflow:auto;padding:6px}
+.ta .dropdown-item{white-space:normal;border-radius:8px;padding:8px 10px;display:flex;gap:12px;align-items:flex-start}
+.ta .dropdown-item.active,.ta .dropdown-item:active{background:var(--sw-soft);color:var(--sw-ink)}
+.code{font:600 12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--sw-link);flex:0 0 auto;min-width:118px}
+.line{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:768px){.line{grid-template-columns:2fr 3fr 1fr}}
+</style>
+</head><body>
+<div class="mock-banner"><span>Mockup 06 · Dropdown typeahead · Not wired up · Fictional data</span><a href="./">All search mockups</a></div>
+<main class="mock-page">
+  <p class="text-uppercase small fw-semibold mb-1" style="color:var(--sw-link)">SolutionBid · Bid for J-2210</p>
+  <h1 class="mock-title">Add a bid line</h1>
+  <p class="text-secondary mb-4">Start typing a word or a code. Codes come from your own company list.</p>
+
+  <div class="card p-3 p-md-4">
+    <div class="line">
+      <div class="ta dropdown">
+        <label class="form-label fw-semibold" for="cc">Cost code</label>
+        <input class="form-control" id="cc" value="drain" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="ccList" aria-autocomplete="list">
+        <div class="dropdown-menu show" id="ccList" role="listbox"></div>
+      </div>
+      <div><label class="form-label fw-semibold" for="desc">Description</label><input class="form-control" id="desc" placeholder="What the customer will see"></div>
+      <div><label class="form-label fw-semibold" for="amt">Amount</label><div class="input-group"><span class="input-group-text">$</span><input class="form-control" id="amt" inputmode="decimal" placeholder="0.00"></div></div>
+    </div>
+    <div style="height:260px" aria-hidden="true"></div>
+    <p class="small text-secondary mb-0">Amounts are what you enter. SolutionBid does not set prices.</p>
+  </div>
+  <aside class="mock-who mt-4"><strong>Who searches here:</strong> a Hero building a bid, finding the right cost code from their own list (“drain labor”, “OWN-PIPE”) without scrolling a long dropdown.</aside>
+</main>
+<script src="mock.js"></script>
+<script>
+const codes = [
+  ['OWN-DRN-LAB','Drain and waste: labor','Labor'],['OWN-DRN-MAT','Drain and waste: material','Material'],['OWN-DRN-EQP','Drain and waste: camera and jetter','Equipment'],
+  ['OWN-PIPE-LAB','Pipe and connections: labor','Labor'],['OWN-PIPE-MAT','Pipe and connections: material','Material'],
+  ['OWN-FIX-LAB','Fixtures: labor','Labor'],['OWN-WH-MAT','Water heaters: material','Material'],['OWN-TRIP','Trip charge','Fee'],['OWN-PRM','Permits and inspections','Fee']
+];
+const cc = document.getElementById('cc'), menu = document.getElementById('ccList');
+let sel = 0, hits = [];
+function render() {
+  const v = cc.value; hits = codes.filter(c => SearchMock.matches(c, v)); sel = Math.min(sel, Math.max(hits.length - 1, 0));
+  menu.classList.toggle('show', document.activeElement === cc || !!v);
+  menu.innerHTML = `<h6 class="dropdown-header">${hits.length} of ${codes.length} codes</h6>` + (hits.map((c, i) => `<button type="button" class="dropdown-item${i === sel ? ' active' : ''}" role="option" aria-selected="${i === sel}" data-i="${i}"><span class="code">${SearchMock.mark(c[0], v)}</span><span><span class="d-block">${SearchMock.mark(c[1], v)}</span><span class="mock-meta">${c[2]}</span></span></button>`).join('') || '<div class="mock-empty">No code matches. <a href="#">Add a company code</a></div>');
+}
+menu.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (!b) return; const c = hits[+b.dataset.i]; cc.value = c[0]; document.getElementById('desc').value = c[1]; menu.classList.remove('show'); });
+cc.addEventListener('input', () => { sel = 0; render(); });
+cc.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, hits.length - 1); render(); e.preventDefault(); }
+  if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); render(); e.preventDefault(); }
+  if (e.key === 'Enter' && hits[sel]) { cc.value = hits[sel][0]; document.getElementById('desc').value = hits[sel][1]; menu.classList.remove('show'); e.preventDefault(); }
+  if (e.key === 'Escape') menu.classList.remove('show');
+});
+render();
+</script>
+</body></html>

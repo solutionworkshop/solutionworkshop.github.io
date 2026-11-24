@@ -1,0 +1,32 @@
+/* Search mockups (#690). Static design exploration only: nothing here is wired up. */
+.mock-banner{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--sw-warn-bg);color:var(--sw-warn);font:600 13px/1.4 var(--sw-body);border-bottom:1px solid var(--sw-line)}
+.mock-banner a{color:inherit;text-decoration:underline}
+.mock-who{display:block;border:1px dashed var(--sw-line);border-radius:12px;padding:12px 16px;background:var(--sw-raised);color:var(--sw-muted);font-size:14px}
+.mock-who strong{color:var(--sw-ink)}
+mark,.mark{background:var(--sw-warn-bg);color:inherit;padding:0;border-radius:2px;box-shadow:0 0 0 1px var(--sw-warn-bg)}
+.mock-meta{display:block;color:var(--sw-muted);font-size:13px;line-height:1.45;margin-top:2px}
+.mock-kbd{display:inline-block;min-width:22px;padding:1px 6px;border:1px solid var(--sw-line);border-bottom-width:2px;border-radius:6px;background:var(--sw-surface);color:var(--sw-muted);font:600 12px/1.5 var(--sw-body);text-align:center}
+.mock-empty{padding:24px;text-align:center;color:var(--sw-muted)}
+html[data-theme] .list-group-item{background:var(--sw-surface);color:var(--sw-ink);border-color:var(--sw-line)}
+html[data-theme] .list-group-item-action:hover,html[data-theme] .list-group-item-action:focus,html[data-theme] .list-group-item.active-row{background:var(--sw-soft);color:var(--sw-ink)}
+html[data-theme] .table{--bs-table-bg:var(--sw-surface);--bs-table-color:var(--sw-ink);--bs-table-border-color:var(--sw-line);--bs-table-hover-bg:var(--sw-soft);--bs-table-hover-color:var(--sw-ink)}
+html[data-theme] .dropdown-menu{--bs-dropdown-link-color:var(--sw-ink);--bs-dropdown-link-hover-bg:var(--sw-soft);--bs-dropdown-link-hover-color:var(--sw-ink);--bs-dropdown-header-color:var(--sw-muted)}
+html[data-theme] .accordion{--bs-accordion-bg:var(--sw-surface);--bs-accordion-color:var(--sw-ink);--bs-accordion-border-color:var(--sw-line);--bs-accordion-btn-color:var(--sw-ink);--bs-accordion-active-bg:var(--sw-soft);--bs-accordion-active-color:var(--sw-ink)}
+html[data-theme] .accordion-button{background:var(--bs-accordion-btn-bg,var(--sw-surface));color:var(--sw-ink)}
+html[data-theme] .accordion-button:not(.collapsed){background:var(--sw-soft)}
+html[data-theme] :is(.offcanvas,.modal-content){background:var(--sw-surface);color:var(--sw-ink);border-color:var(--sw-line)}
+html[data-theme] .nav-pills .nav-link{color:var(--sw-link);background:transparent;border:1px solid var(--sw-line)}
+html[data-theme] .nav-pills .nav-link.active{background:var(--sw-accent);color:var(--sw-button-ink);border-color:var(--sw-accent)}
+html[data-theme] .btn-close{background:transparent var(--bs-btn-close-bg) center/1em auto no-repeat;border:0}
+html[data-theme=dark] .btn-close{filter:invert(1) grayscale(100%) brightness(200%)}
+.mock-chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 6px 4px 12px;border:1px solid var(--sw-line);border-radius:999px;background:var(--sw-soft);color:var(--sw-ink);font-size:13px;line-height:1.3}
+.mock-chip .btn-close{width:10px;height:10px;padding:4px;flex:0 0 auto}
+.mock-status{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;line-height:1.3;white-space:nowrap;background:var(--sw-raised);color:var(--sw-muted);border:1px solid var(--sw-line)}
+.mock-status.good{background:var(--sw-good-bg);color:var(--sw-good);border-color:transparent}
+.mock-status.warn{background:var(--sw-warn-bg);color:var(--sw-warn);border-color:transparent}
+.mock-status.danger{background:var(--sw-danger-bg);color:var(--sw-danger);border-color:transparent}
+.mock-status.info{background:var(--sw-soft);color:var(--sw-link);border-color:transparent}
+.mock-page{max-width:1180px;margin:0 auto;padding:24px 16px 48px}
+@media(min-width:768px){.mock-page{padding:32px 28px 64px}}
+.mock-title{font-size:clamp(30px,4vw,44px);margin:0 0 6px}
+html[data-theme] .modal>.modal-dialog{background:transparent}

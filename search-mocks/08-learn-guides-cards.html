@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><script src="assets/theme.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Guide search cards · Mockup 08</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="24x24" href="assets/favicon-24x24.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/theme.css"><link rel="stylesheet" href="mock.css">
+<style>
+.search-hero{background:var(--sw-soft);border:1px solid var(--sw-line);border-radius:24px;padding:28px 20px}
+@media(min-width:768px){.search-hero{padding:40px}}
+.guide.card{height:100%;padding:20px;border-radius:16px;transition:transform .15s}
+.guide.card:hover{transform:translateY(-2px)}
+.guide h2{font-size:26px}
+.guide .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:12px}
+</style>
+</head><body>
+<div class="mock-banner"><span>Mockup 08 · Cards · Not wired up · Fictional data</span><a href="./">All search mockups</a></div>
+<main class="mock-page">
+  <section class="search-hero mb-4">
+    <p class="text-uppercase small fw-semibold mb-1" style="color:var(--sw-link)">Solution Workshop guides</p>
+    <h1 class="mock-title">What do you want Sōl to take off your plate?</h1>
+    <form role="search" class="mt-3" style="max-width:640px" onsubmit="event.preventDefault()">
+      <label class="visually-hidden" for="gq">Search guides</label>
+      <input class="form-control form-control-lg" id="gq" type="search" value="invoice" placeholder="Search guides: calls, invoices, calendar…" autocomplete="off">
+    </form>
+  </section>
+  <p class="fw-semibold" id="gcount" aria-live="polite"></p>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3" id="grid"></div>
+  <aside class="mock-who mt-4"><strong>Who searches here:</strong> a prospective Hero comparing what Sōl can do for their trade, looking for a guide by task (“invoices”, “missed calls”) rather than reading every page.</aside>
+</main>
+<script src="mock.js"></script>
+<script>
+const guides = [
+  ['Operations','Run the business','Jobs, invoices and the owner inbox in one place.',['invoices','jobs','inbox'],'6 min'],
+  ['Calls','How a call becomes work','A ringing phone turns into a booked job and a recap text.',['calls','booking'],'5 min'],
+  ['Connections','Connect deliberately','Calendar, accounting and your existing number, one at a time.',['calendar','invoice export'],'7 min'],
+  ['Verticals','Take a vertical tour','Plumbing, lawn care, salons and dog walking side by side.',['trades'],'8 min'],
+  ['Operations','From bid to invoice draft','An accepted bid becomes an invoice draft you review before sending.',['bids','invoices'],'4 min'],
+  ['Calls','Never miss the after-hours call','What Sōl says at 2 AM, and what it leaves for you.',['calls','after hours'],'3 min']
+];
+const gq = document.getElementById('gq');
+function render() {
+  const v = gq.value, hits = guides.filter(g => SearchMock.matches([g[0], g[1], g[2], g[3].join(' ')], v));
+  document.getElementById('gcount').textContent = `${hits.length} guide${hits.length === 1 ? '' : 's'}${v.trim() ? ` for “${v.trim()}”` : ''}`;
+  document.getElementById('grid').innerHTML = hits.map(g => `<div class="col"><a href="#" class="card guide text-decoration-none d-flex flex-column" style="color:var(--sw-ink)"><span class="small fw-semibold" style="color:var(--sw-link)">${g[0]} · ${g[4]}</span><h2 class="mt-1 mb-2">${SearchMock.mark(g[1], v)}</h2><p class="text-secondary mb-0">${SearchMock.mark(g[2], v)}</p><span class="tags">${g[3].map(t => `<span class="mock-status"><span>${SearchMock.mark(t, v)}</span></span>`).join('')}</span></a></div>`).join('') || '<div class="col-12 mock-empty">No guide matches. Try “calls” or “calendar”.</div>';
+}
+gq.addEventListener('input', render); render();
+</script>
+</body></html>

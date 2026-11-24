@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><script src="assets/theme.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Hero CRM search · Mockup 01</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="24x24" href="assets/favicon-24x24.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/theme.css"><link rel="stylesheet" href="mock.css">
+</head><body>
+<div class="mock-banner"><span>Mockup 01 · Input group · Not wired up · Fictional data</span><a href="./">All search mockups</a></div>
+<main class="mock-page">
+  <p class="text-uppercase small fw-semibold mb-1" style="color:var(--sw-link)">Hero CRM · Cedar Row Plumbing</p>
+  <h1 class="mock-title">Customers</h1>
+  <p class="text-secondary mb-4">Find a customer by name, phone, address or job number.</p>
+
+  <form class="mb-3" role="search" onsubmit="event.preventDefault()">
+    <label class="form-label fw-semibold" for="q">Search customers</label>
+    <div class="input-group">
+      <select class="form-select" style="flex:0 0 8.5rem" id="scope" aria-label="Search in">
+        <option value="all">Everything</option><option value="name">Name</option><option value="phone">Phone</option><option value="address">Address</option><option value="job">Job #</option>
+      </select>
+      <input class="form-control" id="q" type="search" value="larkspur" placeholder="Try “Whitfield” or 555-0142" autocomplete="off">
+      <button class="btn btn-outline-secondary px-3" type="button" id="clear" aria-label="Clear search">&times;</button>
+      <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+    <div class="form-text">Phone search ignores dashes and spaces. Results stay inside Cedar Row Plumbing.</div>
+  </form>
+
+  <p class="fw-semibold mb-2" id="count" aria-live="polite"></p>
+  <div class="table-responsive border rounded-3" style="border-color:var(--sw-line)!important">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th scope="col">Customer</th><th scope="col">Phone</th><th scope="col" class="d-none d-md-table-cell">Service address</th><th scope="col">Last job</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <aside class="mock-who mt-4"><strong>Who searches here:</strong> a Hero or their office staff, mid-call, looking up a customer by the name, number or street they just heard, to see past jobs and open invoices.</aside>
+</main>
+<script src="mock.js"></script>
+<script>
+const people = [
+  ['Dana Whitfield','(214) 555-0142','418 Larkspur Ln, Plano','J-2207 · Water heater flush','Nov 18'],
+  ['Marcus Ortega','(214) 555-0117','92 Larkspur Ct, Plano','J-2194 · Slab leak check','Nov 12'],
+  ['Priya Raman','(972) 555-0163','7 Briar Hollow Dr, Allen','J-2188 · Kitchen drain','Nov 9'],
+  ['Owen & Lila Brooks','(469) 555-0108','2210 Cottonwood Pkwy, Frisco','J-2160 · Sump pump','Oct 30'],
+  ['Hollis Grant','(214) 555-0191','55 Old Mill Rd, Plano','J-2142 · Toilet rebuild','Oct 21'],
+  ['Teresa Nguyen','(972) 555-0125','1304 Larkspur Ln, Plano','J-2131 · Hose bib replace','Oct 16']
+];
+const q = document.getElementById('q'), scope = document.getElementById('scope');
+function render() {
+  const value = q.value, idx = {name:[0],phone:[1],address:[2],job:[3],all:[0,1,2,3]}[scope.value];
+  const hits = people.filter(p => SearchMock.matches(idx.map(i => p[i]), value));
+  document.getElementById('count').textContent = hits.length + (hits.length === 1 ? ' customer' : ' customers') + (value.trim() ? ` match “${value.trim()}”` : '');
+  document.getElementById('rows').innerHTML = hits.length ? hits.map(p => `<tr><td><a href="#" class="fw-semibold" style="color:var(--sw-link)">${SearchMock.mark(p[0], value)}</a><span class="mock-meta d-md-none">${SearchMock.mark(p[2], value)}</span></td><td class="text-nowrap">${SearchMock.mark(p[1], value)}</td><td class="d-none d-md-table-cell">${SearchMock.mark(p[2], value)}</td><td>${SearchMock.mark(p[3], value)}<span class="mock-meta">${p[4]}</span></td></tr>`).join('') : '<tr><td colspan="4" class="mock-empty">No customers match. Check the spelling, or search by phone instead.</td></tr>';
+}
+q.addEventListener('input', render); scope.addEventListener('change', render);
+document.getElementById('clear').addEventListener('click', () => { q.value = ''; q.focus(); render(); });
+render();
+</script>
+</body></html>

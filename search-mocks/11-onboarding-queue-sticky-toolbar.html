@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><script src="assets/theme.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Onboarding queue toolbar · Mockup 11</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="24x24" href="assets/favicon-24x24.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/theme.css"><link rel="stylesheet" href="mock.css">
+<style>
+.toolbar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--sw-surface) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--sw-line);box-shadow:0 6px 18px #0000000d}
+.toolbar .inner{max-width:1180px;margin:0 auto;padding:12px 16px;display:grid;gap:8px;grid-template-columns:1fr 1fr}
+.toolbar .q{grid-column:1/-1}
+@media(min-width:768px){.toolbar .inner{padding:12px 28px;grid-template-columns:minmax(0,1fr) 180px 180px auto;align-items:center}.toolbar .q{grid-column:auto}}
+.toolbar .count{grid-column:1/-1;font-size:13px;color:var(--sw-muted)}
+@media(min-width:768px){.toolbar .count{grid-column:auto;white-space:nowrap}}
+.req{display:grid;gap:4px 16px;grid-template-columns:1fr auto;padding:14px 16px;border-bottom:1px solid var(--sw-line)}
+.req:last-child{border-bottom:0}
+</style>
+</head><body>
+<div class="mock-banner"><span>Mockup 11 · Sticky toolbar · Not wired up · Fictional data</span><a href="./">All search mockups</a></div>
+<div class="mock-page pb-2"><p class="text-uppercase small fw-semibold mb-1" style="color:var(--sw-link)">Staff · Onboarding</p><h1 class="mock-title">Onboarding work queue</h1><p class="text-secondary mb-0">Scroll the list: the search and filters stay pinned to the top.</p></div>
+<div class="toolbar" role="search">
+  <div class="inner">
+    <div class="q"><label class="visually-hidden" for="oq">Search setup requests</label><input class="form-control" id="oq" type="search" placeholder="Search business, owner or number" autocomplete="off"></div>
+    <div><label class="visually-hidden" for="ost">Status</label><select class="form-select" id="ost"><option value="">Any status</option><option>Needs number</option><option>Waiting on Hero</option><option>Ready to review</option><option>Live</option></select></div>
+    <div><label class="visually-hidden" for="osort">Sort</label><select class="form-select" id="osort"><option value="age">Oldest first</option><option value="name">Business A–Z</option></select></div>
+    <div class="count" id="ocount" aria-live="polite"></div>
+  </div>
+</div>
+<main class="mock-page pt-3">
+  <div class="card p-0" id="olist"></div>
+  <aside class="mock-who mt-4"><strong>Who searches here:</strong> Solution Workshop onboarding staff working a long queue, finding one Hero's setup request by business name or number, or showing only requests waiting on a number.</aside>
+</main>
+<script src="mock.js"></script>
+<script>
+const names = ['Cedar Row Plumbing','Greenway Lawn Co.','Pawsome Walks','Brightline Electric','Cut & Co. Studio','Northgate Drain Co.','Bluebonnet Rooter','Elm Street Plumbing','Lakeside Lawn & Tree','Hollow Oak HVAC','Ridge Line Roofing','Prairie Paws Grooming','Summit Pest Care','Clearwater Pools','Copper Kettle Catering','Silver Shears Salon','Maple Grove Movers','Trailhead Handyman'];
+const statuses = ['Needs number','Waiting on Hero','Ready to review','Live'];
+const tone = { 'Needs number': 'warn', 'Waiting on Hero': '', 'Ready to review': 'info', 'Live': 'good' };
+const reqs = names.map((n, i) => ({ n, owner: ['Matteo R.','Jo T.','Rae K.','Devin S.','Mia F.','Alice P.'][i % 6], phone: `(214) 555-01${String(10 + i).padStart(2, '0')}`, s: statuses[i % 4], age: 1 + ((i * 7) % 19) }));
+const oq = document.getElementById('oq'), ost = document.getElementById('ost'), osort = document.getElementById('osort');
+function render() {
+  const v = oq.value;
+  let hits = reqs.filter(r => (!ost.value || r.s === ost.value) && SearchMock.matches([r.n, r.owner, r.phone], v));
+  hits.sort(osort.value === 'name' ? (a, b) => a.n.localeCompare(b.n) : (a, b) => b.age - a.age);
+  document.getElementById('ocount').textContent = `${hits.length} of ${reqs.length} requests`;
+  document.getElementById('olist').innerHTML = hits.map(r => `<a href="#" class="req text-decoration-none" style="color:var(--sw-ink)"><strong>${SearchMock.mark(r.n, v)}</strong><span class="mock-status ${tone[r.s]}">${r.s}</span><span class="mock-meta">${SearchMock.mark(r.owner, v)} · ${SearchMock.mark(r.phone, v)}</span><span class="mock-meta text-end">${r.age} day${r.age === 1 ? '' : 's'} in queue</span></a>`).join('') || '<div class="mock-empty">No requests match.</div>';
+}
+[oq, ost, osort].forEach(el => el.addEventListener('input', render)); render();
+</script>
+</body></html>
