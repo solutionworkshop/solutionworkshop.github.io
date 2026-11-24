@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>HQ Design Pass</title>
+<style>
+:root{--navy:#1b2233;--ink:#f2f0ea;--soft:#c9d1e4;--label:#8fa6d6;--blue:#2166c2}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:#11161f;color:var(--ink);font-family:Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+.stage{position:absolute;inset:0;display:grid;place-items:center}
+.slide{position:absolute;width:1920px;height:1080px;background:var(--navy);transform-origin:center;display:none}
+.slide.on{display:block}
+.slide img{width:1920px;height:1080px;display:block}
+.text{padding:128px;display:flex;flex-direction:column;justify-content:center;height:100%}
+.kicker{font-size:28px;font-weight:600;letter-spacing:4px;color:var(--label);margin-bottom:32px}
+h1{font-size:120px;font-weight:800;line-height:1.05;letter-spacing:-3px;margin-bottom:40px}
+.lede{font-size:36px;line-height:1.45;color:var(--soft);max-width:1300px}
+.meta{font-size:26px;color:var(--label);margin-top:56px}
+h2{font-size:72px;font-weight:800;letter-spacing:-1px;margin-bottom:56px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+h3{font-size:36px;font-weight:600;color:var(--label);margin-bottom:24px}
+ul{font-size:32px;line-height:1.45;color:var(--soft);padding-left:40px}
+li{margin-bottom:16px}
+.bar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;gap:16px;padding:12px;font-size:15px;color:var(--label)}
+.bar button{background:#232b39;color:var(--ink);border:1px solid #333c4c;border-radius:10px;padding:8px 16px;font:600 15px inherit;cursor:pointer}
+.bar button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+</style>
+</head>
+<body>
+<main class="stage" id="stage" aria-live="polite">
+  <section class="slide"><div class="text">
+    <p class="kicker">SOLUTION WORKSHOP · DESIGN PASS</p>
+    <h1>The HQ look,<br>across the site</h1>
+    <p class="lede">The light HQ concepts from November 23, applied to the shared theme and to the Hero and staff pages. Before is main, after is the new branch.</p>
+    <p class="meta">Proposal for review · Not merged, not deployed · All data shown is fictional</p>
+  </div></section>
+  <section class="slide"><img src="img/01-site-theme.png" alt="Before and after: the homepage with the shared theme. Warm canvas, off-white cards, navy ink, Inter headings, lighter site header."></section>
+  <section class="slide"><img src="img/02-hq-dashboard.png" alt="Before and after: HQ. PRO HQ becomes HQ, and the raw JSON error becomes a plain message."></section>
+  <section class="slide"><img src="img/03-crew-board.png" alt="Before and after: crew board with one header and plain labels."></section>
+  <section class="slide"><img src="img/04-hero-crm.png" alt="Before and after: customer page with Owes and Paid so far money cards."></section>
+  <section class="slide"><img src="img/05-setup-steps.png" alt="Before and after: setup steps shown as one segmented progress bar."></section>
+  <section class="slide"><img src="img/06-staff-customers.png" alt="Before and after: staff customers page titled Customers with a plain sign-in message."></section>
+  <section class="slide"><img src="img/07-staff-onboarding.png" alt="Before and after: Hero setup queue with an amber status pill."></section>
+  <section class="slide"><img src="img/08-sales-crm.png" alt="Before and after: sales CRM sign-in with the shared theme and a plain message."></section>
+  <section class="slide"><img src="img/09-guides.png" alt="Before and after: guides page with Inter headings and soft tab pills."></section>
+  <section class="slide"><img src="img/10-number-finder.png" alt="Before and after: number finder with the warm theme and rounded inputs."></section>
+  <section class="slide"><div class="text">
+    <h2>Where it stands</h2>
+    <div class="cols">
+      <div><h3>Checked</h3><ul><li>Repository checks pass</li><li>20 pages reviewed at iPad portrait, light mode</li><li>Tests updated for the new wording</li></ul></div>
+      <div><h3>Still open</h3><ul><li>Setup-page visual release check</li><li>Dark mode and phone-width review</li><li>HQ captured with fictional data loaded</li><li>Review and merge</li></ul></div>
+    </div>
+  </div></section>
+</main>
+<nav class="bar" aria-label="Slides">
+  <button type="button" id="prev" aria-label="Previous slide">←</button>
+  <span id="count"></span>
+  <button type="button" id="next" aria-label="Next slide">→</button>
+  <button type="button" id="full">Full screen</button>
+</nav>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let i=Math.max(0,Math.min(slides.length-1,(parseInt(location.hash.slice(1),10)||1)-1));
+function fit(){const s=Math.min(innerWidth/1920,(innerHeight-56)/1080);slides.forEach(el=>el.style.transform=`scale(${s}) translateY(${-28/s}px)`);}
+function show(n){i=(n+slides.length)%slides.length;slides.forEach((el,k)=>el.classList.toggle('on',k===i));document.getElementById('count').textContent=`${i+1} / ${slides.length}`;history.replaceState(null,'',`#${i+1}`);}
+document.getElementById('prev').onclick=()=>show(i-1);
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.();
+document.getElementById('stage').onclick=e=>show(e.clientX<innerWidth/3?i-1:i+1);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(i+1);}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(i-1);}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);});
+let x0=null;addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40)show(dx<0?i+1:i-1);x0=null;});
+addEventListener('resize',fit);fit();show(i);
+</script>
+</body>
+</html>
